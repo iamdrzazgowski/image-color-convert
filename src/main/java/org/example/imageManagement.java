@@ -83,6 +83,22 @@ public class imageManagement {
             thread.join();
         }
     }
+
+    public int[] calculateHistogram() {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int[] histogram = new int[256];
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Color rgb =  new Color(image.getRGB(x, y));
+                int r = rgb.getRed();
+                histogram[r]++;
+            }
+        }
+
+        return histogram;
+    }
 }
 
 
