@@ -2,7 +2,9 @@ package org.example;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.IOException;
 
@@ -119,6 +121,18 @@ public class imageManagement {
                 image.setRGB(x,y, newColor.getRGB());
             }
         }
+    }
+
+    public void convertToXYZColorSpace() {
+        ColorSpace xyzColorSpace = ColorSpace.getInstance(ColorSpace.CS_CIEXYZ);
+        ColorConvertOp convertOp = new ColorConvertOp(xyzColorSpace, null);
+        image = convertOp.filter(image, null);
+    }
+
+    public void convertToRGBColorSpace() {
+        ColorSpace rgbColorSpace = ColorSpace.getInstance(ColorSpace.CS_sRGB);
+        ColorConvertOp convertOp = new ColorConvertOp(rgbColorSpace, null);
+        image = convertOp.filter(image, null);
     }
 }
 
