@@ -86,7 +86,7 @@ public class imageManagement {
         }
     }
 
-    public int[] calculateHistogram() {
+    public int[] calculateHistogram(int color) {
         int width = image.getWidth();
         int height = image.getHeight();
         int[] histogram = new int[256];
@@ -94,34 +94,63 @@ public class imageManagement {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Color rgb =  new Color(image.getRGB(x, y));
-                int r = rgb.getRed();
-                histogram[r]++;
+                int value = 0;
+                switch (color){
+                    case 0:
+                        value = rgb.getRed();
+                        break;
+                    case 1:
+                        value= rgb.getGreen();
+                        break;
+                    case 2:
+                        value =rgb.getBlue();
+                        break;
+                }
+                histogram[value]++;
             }
         }
-
         return histogram;
     }
 
-    public void equalalizeHistogram(){
-        int totalPixels = height * width;
-        int[] histogram = calculateHistogram();
+    private int[] calculateCumulativeHistogram(int[] histogram, int totalPixels){
         int[] cumulativeHistogram = new int[256];
-
         cumulativeHistogram[0] = histogram[0];
-        for(int i = 1; i < 256; i++){
+        for (int i = 1; i < 256; i++) {
             cumulativeHistogram[i] = cumulativeHistogram[i - 1] + histogram[i];
         }
+
+        return cumulativeHistogram;
+    }
+
+    public void equalizeHistogram(){
+        int totalPixels = height * width;
+        int[] histogramRed = calculateHistogram(0);
+        int[] histogramGreen = calculateHistogram(1);
+        int[] histogramBlue = calculateHistogram(2);
+
+        int[] cumulativeHistogramRed = calculateCumulativeHistogram(histogramRed, totalPixels);
+        int[] cumulativeHistogramGreen = calculateCumulativeHistogram(histogramGreen, totalPixels);
+        int[] cumulativeHistogramBlue = calculateCumulativeHistogram(histogramBlue, totalPixels);
 
         for(int y = 0; y < height; y++){
             for(int x = 0; x < width; x++){
                 Color color = new Color(image.getRGB(x,y));
-                int intensity = color.getRed();
-                int eqalizedIntensity = (int)(cumulativeHistogram[intensity] * 255 / totalPixels);
-                Color newColor = new Color(eqalizedIntensity, eqalizedIntensity, eqalizedIntensity);
+                int red = color.getRed();
+                int green = color.getGreen();
+                int blue = color.getBlue();
+
+                int equalizeRed = cumulativeHistogramRed[red] * 255 / totalPixels;
+                int equalizeGreen = cumulativeHistogramGreen[green] * 255 / totalPixels;
+                int equalizeBlue = cumulativeHistogramBlue[blue] * 255 / totalPixels;
+
+                Color newColor = new Color(equalizeRed, equalizeGreen, equalizeBlue);
                 image.setRGB(x,y, newColor.getRGB());
             }
         }
+
+
     }
+
 
     public void convertToXYZColorSpace() {
         ColorSpace xyzColorSpace = ColorSpace.getInstance(ColorSpace.CS_CIEXYZ);
