@@ -9,7 +9,8 @@ public class Main {
         imageManagement managementImage = new imageManagement();
         managementImage.readImage(path);
 //        managementImage.increaseBrightness(50);
-        managementImage.addBrightnessWithThreads(50);
+//        managementImage.addBrightnessWithThreads(50);
+        managementImage.equalalizeHistogram();
         managementImage.writeImage(path);
 
     }

@@ -99,6 +99,27 @@ public class imageManagement {
 
         return histogram;
     }
+
+    public void equalalizeHistogram(){
+        int totalPixels = height * width;
+        int[] histogram = calculateHistogram();
+        int[] cumulativeHistogram = new int[256];
+
+        cumulativeHistogram[0] = histogram[0];
+        for(int i = 1; i < 256; i++){
+            cumulativeHistogram[i] = cumulativeHistogram[i - 1] + histogram[i];
+        }
+
+        for(int y = 0; y < height; y++){
+            for(int x = 0; x < width; x++){
+                Color color = new Color(image.getRGB(x,y));
+                int intensity = color.getRed();
+                int eqalizedIntensity = (int)(cumulativeHistogram[intensity] * 255 / totalPixels);
+                Color newColor = new Color(eqalizedIntensity, eqalizedIntensity, eqalizedIntensity);
+                image.setRGB(x,y, newColor.getRGB());
+            }
+        }
+    }
 }
 
 
