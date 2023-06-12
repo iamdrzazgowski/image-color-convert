@@ -84,7 +84,7 @@ public class imageManagement {
         }
     }
 
-    public int[] calculateHistogramRed() {
+    public int[] calculateHistogram(int color) {
         int width = image.getWidth();
         int height = image.getHeight();
         int[] histogram = new int[256];
@@ -92,37 +92,18 @@ public class imageManagement {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Color rgb =  new Color(image.getRGB(x, y));
-                int value = rgb.getRed();
-                histogram[value]++;
-            }
-        }
-        return histogram;
-    }
+                int value = 0;
+                switch(color){
+                    case 0:
+                        value = rgb.getRed();
+                        break;
+                    case 1:
+                        value = rgb.getGreen();
+                        break;
+                    case 2:
+                        value = rgb.getBlue();
 
-    public int[] calculateHistogramGreen() {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        int[] histogram = new int[256];
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                Color rgb =  new Color(image.getRGB(x, y));
-                int value = rgb.getGreen();
-                histogram[value]++;
-            }
-        }
-        return histogram;
-    }
-
-    public int[] calculateHistogramBlue() {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        int[] histogram = new int[256];
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                Color rgb =  new Color(image.getRGB(x, y));
-                int value = rgb.getBlue();
+                }
                 histogram[value]++;
             }
         }
@@ -146,9 +127,9 @@ public class imageManagement {
     }
 
     public void equalizeHistogram(){
-        int[] histogramRed = calculateHistogramRed();
-        int[] histogramGreen = calculateHistogramGreen();
-        int[] histogramBlue = calculateHistogramBlue();
+        int[] histogramRed = calculateHistogram(0);
+        int[] histogramGreen = calculateHistogram(1);
+        int[] histogramBlue = calculateHistogram(2);
 
         int[] normalizedHistogramRed = calculateCumulativeHistogram(histogramRed);
         int[] normalizedHistogramGreen = calculateCumulativeHistogram(histogramGreen);
