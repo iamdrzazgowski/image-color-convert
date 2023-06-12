@@ -10,11 +10,17 @@ public class Main {
 
         imageManagement managementImage = new imageManagement();
         managementImage.readImage(path);
+
 //        managementImage.increaseBrightness(50);
 //        managementImage.addBrightnessWithThreads(50);
-//        managementImage.equalizeHistogram();
+
+//        Konwersja na barzy CIEXYZ (z jakiegoś powodu całe zdjęcie robi się zielone)
 //        managementImage.convertToXYZColorSpace();
+
+//        Wyrównywanie histogramu
         managementImage.equalizeHistogram();
+
+//        Zapisywanie obrazu
         managementImage.writeImage(path2);
 
 
